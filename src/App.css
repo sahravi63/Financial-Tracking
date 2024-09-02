@@ -1,0 +1,158 @@
+/* Common Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Navigation styling */
+.nav-ul {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  
+  display: flex;
+  justify-content: space-around; /* Center the navigation items horizontally */
+  background-color: #d7cece; /* Background color for the navigation bar */
+}
+
+.nav-ul li {
+  display: inline-block;
+  margin-right: 20px; /* Space between navigation items */
+}
+
+.nav-ul li a {
+  text-decoration: none;
+  color: black;
+  padding: 10px;
+  display: block; /* Ensure the link fills the space */
+}
+
+.nav-ul li a:hover {
+  color: #007BFF; /* Change color on hover */
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.content {
+  flex: 1;  /* Main content area takes up the remaining space */
+}
+
+footer {
+  background-color: #f1f1f1;
+  padding: 10px;
+  text-align: center; /* Centering the text in the footer */
+}
+
+footer p {
+  margin: 0;  /* Remove any default margins */
+}
+
+.register{
+  margin: 25px auto; /* Centered margin with auto on left and right */
+  max-width: 500px; /* Set a maximum width for the form */
+  padding: 25px;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Rounded corners for the form */
+  background-color: #f9f9f9; /* Light background for the form */
+  display: flex;
+  flex-direction: column; /* Arrange items in a column */
+  align-items: center; /* Center items horizontally */
+}
+
+/* Login Form Styles */
+.login {
+  margin: 25px auto; /* Centered margin with auto on left and right */
+  max-width: 500px; /* Set a maximum width for the form */
+  padding: 25px;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Rounded corners for the form */
+  background-color: #f9f9f9; /* Light background for the form */
+  display: flex;
+  flex-direction: column; /* Arrange items in a column */
+  align-items: center; /* Center items horizontally */
+}
+
+.inputBox {
+  margin-bottom: 20px; /* Space between inputs */
+  padding: 15px;
+  width: 100%;
+  border: 1px solid #ccc; /* Lighter border color */
+  border-radius: 4px; /* Rounded corners for inputs */
+  box-sizing: border-box;
+}
+
+.passwordWrapper {
+  position: relative;
+  margin-bottom: 20px; /* Space between inputs */
+  width: 100%;
+}
+
+.passwordWrapper .inputBox {
+  padding-right: 60px; /* Space for the button inside the input */
+  width: 100%;
+  box-sizing: border-box; /* Ensure padding does not affect width */
+}
+
+.passwordWrapper .toggleButton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #007BFF; /* Customize button color */
+}
+
+.appButton {
+  padding: 10px 20px;
+  width: 150px;
+  background-color: rgb(180, 180, 227);
+  border: none;
+  border-radius: 4px; /* Rounded corners for button */
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.appButton:hover {
+  background-color: rgb(150, 150, 200); /* Slightly darker on hover */
+}
+
+/* Add this CSS for the SignUp and Login buttons placement */
+.auth-buttons {
+  display: flex;
+  flex-direction: column; /* Arrange buttons in a column */
+  justify-content: center; /* Center the buttons horizontally */
+  margin-top: 20px; /* Space above the buttons */
+}
+
+.auth-buttons .appButton {
+  margin: 10px 0; /* Space between the buttons */
+  padding: 10px 20px;
+  background-color: rgb(180, 180, 227);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.auth-buttons .appButton:hover {
+  background-color: rgb(150, 150, 200);
+}
+
+.auth-buttons a {
+  color: inherit;
+  text-decoration: none;
+}
