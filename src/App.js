@@ -7,7 +7,8 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import DashBoard from './components/DashBoard/dashboard';
 import MainPage from './components/mainpage/mainpage';
-import Profile from './components/profile'; // Adjust path if needed
+import Profile from './components/profile';
+import Home from './components/Home/homepage'; // Adjust path if needed
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -18,15 +19,21 @@ function App() {
     setUser(userData);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUser(null);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
         <Nav isLoggedIn={isLoggedIn} user={user} />
         <div className="content">
           <Routes>
-            <Route path="/dashboard" element={<DashBoard />} />
-            <Route path="/mainpage" element={isLoggedIn ? <MainPage /> : <Navigate to="/login" />} />
-            <Route path="/profile" element={isLoggedIn ? <Profile user={user} /> : <Navigate to="/login" />} />
+            <Route path="/" element={<Home />} /> {/* Home page route */}
+            <Route path="/dashboard" element={isLoggedIn ? <DashBoard /> : <Navigate to="/" />} />
+            <Route path="/mainpage" element={isLoggedIn ? <MainPage /> : <Navigate to="/" />} />
+            <Route path="/profile" element={isLoggedIn ? <Profile user={user} onLogout={handleLogout} /> : <Navigate to="/" />} />
             <Route path="/contact-us" element={<h1>Contact Us</h1>} />
             <Route path="/more" element={<h1>More</h1>} />
             <Route path="/search" element={<h1>Search</h1>} />
@@ -43,7 +50,3 @@ function App() {
 }
 
 export default App;
-
-
-
-// skdugfiwugf
