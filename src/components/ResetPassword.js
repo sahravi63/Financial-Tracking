@@ -1,51 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+// src/components/ResetPassword.js
+import React, { useState } from 'react';
 
 const ResetPassword = () => {
-  const { token } = useParams();
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
-      return;
-    }
-
+  const handleReset = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/reset-password/${token}`, {
+      const response = await fetch('http://localhost:5000/reset-password', {
         method: 'POST',
-        body: JSON.stringify({ password }),
-        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
       const result = await response.json();
-      setMessage(result.message || 'Password has been reset');
+      if (response.ok) {
+        setMessage('Password reset instructions sent to your email.');
+      } else {
+        setMessage(result.error || 'Failed to send reset instructions.');
+      }
     } catch (error) {
-      console.error('Error resetting password:', error);
-      setMessage('Failed to reset password');
+      console.error('Error during password reset:', error);
+      setMessage('Failed to send reset instructions.');
     }
   };
 
   return (
-    <div>
-      <h2>Reset Password</h2>
-      <form onSubmit={handleResetPassword}>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter new password"
-        />
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Confirm new password"
-        />
-        <button type="submit">Reset Password</button>
-      </form>
+    <div className='reset-password'>
+      <h1>Reset Password</h1>
+      <input 
+        className='inputBox' 
+        type="email" 
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder='Enter your email'
+      />
+      <button onClick={handleReset} className='appButton' type='button'>
+        Send Reset Instructions
+      </button>
       {message && <p>{message}</p>}
     </div>
   );

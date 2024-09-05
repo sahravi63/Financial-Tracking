@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import ExpenseList from './ExpenseList';
+import AddExpense from './AddExpense';
 
 const MainPage = () => {
   const [expense, setExpense] = useState("");
   const [creditCard, setCreditCard] = useState("");
   const [bill, setBill] = useState("");
   const [message, setMessage] = useState("");
+  const [expenses, setExpenses] = useState([]);
+
+  useEffect(() => {
+    // Fetch expenses from the backend when the component mounts
+    const fetchExpenses = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/financial-data');
+        setExpenses(response.data);
+      } catch (error) {
+        console.error('Error fetching expenses:', error);
+      }
+    };
+
+    fetchExpenses();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,10 +37,18 @@ const MainPage = () => {
       setExpense("");
       setCreditCard("");
       setBill("");
+
+      // Optionally fetch the updated list of expenses
+      const response = await axios.get('http://localhost:5000/financial-data');
+      setExpenses(response.data);
     } catch (error) {
       console.error('Error saving data:', error);
       setMessage("Failed to save data.");
     }
+  };
+
+  const handleAddExpense = (newExpense) => {
+    setExpenses((prevExpenses) => [...prevExpenses, newExpense]);
   };
 
   return (
@@ -59,6 +85,16 @@ const MainPage = () => {
         <button type="submit">Save</button>
       </form>
       {message && <p>{message}</p>}
+
+      {/* Render the links to other expense management pages */}
+      <div className="expense-links">
+        <Link to="/expenses">View Expenses</Link>
+        <Link to="/add-expense">Add Expense</Link>
+      </div>
+
+      {/* Render AddExpense and ExpenseList components */}
+      <AddExpense onAdd={handleAddExpense} />
+      <ExpenseList expenses={expenses} />
     </div>
   );
 };

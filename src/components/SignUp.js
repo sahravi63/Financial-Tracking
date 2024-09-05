@@ -44,10 +44,18 @@ const SignUp = () => {
       });
 
       const result = await response.json();
-      console.log("Registration successful:", result);
 
-      // Redirect to login or another page after successful registration
-      navigate('/login');
+      if (response.ok) {
+        console.log("Registration successful:", result);
+        navigate('/login');
+      } else {
+        // Handle specific error for already existing email
+        if (result.error === 'Email already exists') {
+          setError("This email is already registered. Please proceed to login.");
+        } else {
+          setError(result.error || "Registration failed. Please try again.");
+        }
+      }
     } catch (error) {
       console.error("Error during registration:", error);
       setError("Registration failed. Please try again.");
