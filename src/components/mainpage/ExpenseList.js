@@ -4,12 +4,12 @@ const ExpenseList = () => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [token, setToken] = useState(null); // Add state for the token
+  const [token, setToken] = useState(null);
 
-  // Assuming you get the token from localStorage or context
+  // Fetch the token from localStorage
   useEffect(() => {
     const fetchToken = () => {
-      const storedToken = localStorage.getItem('token'); // or wherever you store the token
+      const storedToken = localStorage.getItem('token');
       setToken(storedToken);
     };
 
@@ -25,13 +25,13 @@ const ExpenseList = () => {
       }
 
       try {
-        const response = await fetch('/api/expenses', {
+        const response = await fetch('http://localhost:5000/api/expenses', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          credentials: 'include' // If you're using cookies
+          credentials: 'include', // If using cookies
         });
 
         if (!response.ok) {

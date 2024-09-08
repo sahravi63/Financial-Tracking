@@ -30,7 +30,6 @@ const Nav = ({ isLoggedIn, user, isAdmin }) => {
             <li><Link to="/">Home</Link></li>
             <li><Link to="/SignUp">Sign Up</Link></li>
             <li><Link to="/Login">Login</Link></li>
-            <li><Link to="/admin-login">Admin Login</Link></li>
           </>
         )}
       </ul>

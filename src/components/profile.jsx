@@ -9,11 +9,11 @@ const ProfileComponent = ({ onLogout }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/current-user') // Adjust this endpoint as needed
+    axios.get('/profile') // Adjust this endpoint as needed
       .then(response => {
-        const { name, profilePic } = response.data;
+        const { name, profilePicture } = response.data;
         setUserName(name);
-        setProfilePic(profilePic ? profilePic : 'default-avatar.png');
+        setProfilePic(profilePicture ? profilePicture : 'default-avatar.png');
       })
       .catch(error => console.error('Error fetching user data:', error));
   }, []);
@@ -34,13 +34,13 @@ const ProfileComponent = ({ onLogout }) => {
     event.preventDefault();
     
     const formData = new FormData();
-    formData.append('userName', userName);
+    formData.append('name', userName);
     if (file) {
-      formData.append('profilePic', file);
+      formData.append('profilePicture', file);
     }
 
     try {
-      await axios.post('/updateProfile', formData, {
+      await axios.put('/profile', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       alert('Profile updated successfully!');
@@ -55,57 +55,40 @@ const ProfileComponent = ({ onLogout }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ padding: '20px' }}>
-      <h2>Profile</h2>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <div>
+    <form onSubmit={handleSubmit} className="profile-form">
+      <h2 className="profile-title">Profile</h2>
+      <div className="profile-content">
+        <div className="profile-picture-section">
           <img
             src={profilePic}
             alt="Profile"
-            width="100"
-            style={{ borderRadius: '50%' }}
+            className="profile-picture"
           />
           <input
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            style={{ marginTop: '10px' }}
+            className="file-input"
           />
         </div>
-        <div>
-          <p><strong>User Name:</strong></p>
+        <div className="profile-details-section">
+          <label className="profile-label"><strong>User Name:</strong></label>
           <input
             type="text"
             value={userName}
             onChange={handleUserNameChange}
-            style={{ padding: '5px', fontSize: '16px' }}
+            className="profile-input"
           />
         </div>
       </div>
-      <button
-        type="submit"
-        style={{
-          marginTop: '20px',
-          padding: '10px 20px',
-          fontSize: '16px',
-          cursor: 'pointer',
-        }}
-      >
-        Save Changes
-      </button>
-      <button
-        type="button"
-        onClick={handleLogout}
-        style={{
-          marginTop: '20px',
-          padding: '10px 20px',
-          fontSize: '16px',
-          cursor: 'pointer',
-          marginLeft: '10px',
-        }}
-      >
-        Logout
-      </button>
+      <div className="profile-buttons">
+        <button type="submit" className="profile-button save-button">
+          Save Changes
+        </button>
+        <button type="button" onClick={handleLogout} className="profile-button logout-button">
+          Logout
+        </button>
+      </div>
     </form>
   );
 };
