@@ -1,63 +1,53 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const AddExpense = ({ onAdd }) => {
+const AddExpense = () => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [userId, setUserId] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    
-    const expense = { description, amount: parseFloat(amount) };
-  
     try {
-      const response = await fetch('http://localhost:5000/api/expenses/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(expense),
+      await axios.post('http://localhost:5000/api/expenses', {
+        description,
+        amount,
+        userId,
       });
-  
-      const data = await response.json();
-      if (response.ok) {
-        onAdd(data.expense);
-        setDescription('');
-        setAmount('');
-      } else {
-        setError(data.message || 'Failed to add expense.');
-      }
+      setDescription('');
+      setAmount('');
+      setUserId('');
+      alert('Expense added successfully!');
     } catch (error) {
-      setError('An error occurred. Please try again.');
-    } finally {
-      setLoading(false);
+      alert('Failed to add expense');
     }
   };
-  
 
   return (
     <form onSubmit={handleSubmit}>
+      <h2>Add Expense</h2>
       <input
         type="text"
+        placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="Expense description"
         required
       />
       <input
         type="number"
+        placeholder="Amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        placeholder="Amount"
         required
       />
-      <button type="submit" disabled={loading}>
-        {loading ? 'Adding...' : 'Add Expense'}
-      </button>
-      {error && <p className="error">{error}</p>}
+      <input
+        type="text"
+        placeholder="User ID"
+        value={userId}
+        onChange={(e) => setUserId(e.target.value)}
+        required
+      />
+      <button type="submit">Add Expense</button>
     </form>
   );
 };

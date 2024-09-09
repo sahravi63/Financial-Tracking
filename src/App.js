@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Nav from './components/Nav';
@@ -20,6 +20,32 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [expenses, setExpenses] = useState([]);
+
+  // Fetch expenses function
+  const fetchExpenses = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/expenses', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setExpenses(data);
+      } else {
+        console.error('Failed to fetch expenses');
+      }
+    } catch (error) {
+      console.error('Error fetching expenses', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchExpenses();
+    }
+  }, [isLoggedIn]);
 
   const handleLogin = (userData) => {
     setIsLoggedIn(true);
@@ -33,10 +59,18 @@ function App() {
     setIsAdmin(false);
   };
 
+  const handleAddExpense = (expense) => {
+    setExpenses([...expenses, expense]);
+  };
+
+  const handleRemoveExpense = (id) => {
+    setExpenses(expenses.filter(expense => expense._id !== id));
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Nav isLoggedIn={isLoggedIn} user={user} isAdmin={isAdmin} />
+        <Nav isLoggedIn={isLoggedIn} user={user} isAdmin={isAdmin} onLogout={handleLogout} />
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -70,8 +104,14 @@ function App() {
               element={isLoggedIn && isAdmin ? <Users /> : <Navigate to="/" />} 
             />
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/expenses" element={<ExpenseList />} /> 
-            <Route path="/add-expense" element={<AddExpense />} /> 
+            <Route 
+              path="/expenses" 
+              element={isLoggedIn ? <ExpenseList expenses={expenses} onRemoveExpense={handleRemoveExpense} /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/add-expense" 
+              element={isLoggedIn ? <AddExpense onAddExpense={handleAddExpense} /> : <Navigate to="/" />} 
+            />
             <Route path="*" element={<h1>404 - Not Found</h1>} />
           </Routes>
         </div>
