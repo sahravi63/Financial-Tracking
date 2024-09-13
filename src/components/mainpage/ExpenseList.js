@@ -22,12 +22,18 @@ const ExpenseList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/expenses/${id}`);
+      console.log('Deleting expense with ID:', id); // Log the ID being deleted
+      await axios.delete(`http://localhost:5000/api/expenses/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       setExpenses(expenses.filter(expense => expense._id !== id));
     } catch (error) {
-      alert('Failed to delete expense');
+      console.error('Error removing expense:', error.response?.data || error.message);
     }
   };
+  
 
   const handleEdit = (expense) => {
     setEditing(expense._id);
